@@ -25,7 +25,7 @@
                 arr = [],
                 $imgs = $(sel, $w);
 
-            $.each($imgs, function (index, node) {
+            $.each($imgs, function (index, node, src) {
                 $(node).removeAttr("width").removeAttr("height");
 
 //                if (node.width > editor.options.initialFrameWidth) {
@@ -33,10 +33,14 @@
 //                        parseInt($(editor.body).css("padding-left"))  -
 //                        parseInt($(editor.body).css("padding-right")));
 //                }
-
+                /*
+                 * 如果使用js原生的node.src方式获取图片路径，本地上传的图片会默认加上locahost，从而导致
+                 * 保存到服务器的图片路径为locahost://imgsrc.png,读取后无法显示。
+                */
+                src = $(node).attr('src');
                 return arr.push({
-                    _src: node.src,
-                    src: node.src
+                    _src: src,
+                    src: src
                 });
             });
 
@@ -185,6 +189,12 @@
         uploadComplete: function(r){
             var me = this;
             try{
+                /*
+                 * 在chrome和firefox浏览器下，会自动加入pre标签
+                 * 需要删除该标签，才可以显示上传的图片
+                 *
+                 */
+                r = r.replace(/<pre.*?>/, "").replace("</pre>", "");
                 var json = eval('('+r+')');
                 Base.callback(me.editor, me.dialog, json.url, json.state);
             }catch (e){
@@ -442,4 +452,3 @@
         Base.callback(editor, $w, url, state)
     })
 })();
-

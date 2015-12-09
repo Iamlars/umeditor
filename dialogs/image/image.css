@@ -40,3 +40,10 @@
 .edui-dialog-image .edui-image-item .edui-image-pic{position: absolute;left:-9999px;}
 .edui-dialog-image .edui-image-item .edui-image-close{position:absolute;right:0;background: url('images/close.png');width:17px;height:17px;cursor:pointer;z-index:1}
 .edui-dialog-image .edui-image-item.hover .edui-image-close{display: block;}
+
+/*
+ * scale
+ * 需要显式设置.edui-scale的box-sizing，
+ * 否则当全局设置div为box-sizing:border-box时，会导致缩放功能失效
+*/
+.edui-scale{box-sizing: content-box;}
